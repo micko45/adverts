@@ -158,7 +158,7 @@ def makeDataFrame(urls):
     pickleDump(df.drop([ 'LastUpdateInDays' ], axis=1))
     mail_df.sendDFAsMail(df.drop([ 'LastUpdateInDays' ], axis=1))
 #    print(df['Prod_URL'])
-    print(df.drop(['Prod_URL', 'LastUpdateInDays'], axis=1))
+    print(df.drop(['Prod_URL', 'LastUpdateInDays', 'MainCat', 'SubCat', 'ID'], axis=1))
 
 if __name__ == "__main__":
 
