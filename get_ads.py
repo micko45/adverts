@@ -5,7 +5,7 @@ import pandas as pd
 import pickle
 import mail_df
 
-pd.set_option('display.max_colwidth', None)
+pd.set_option('display.max_colwidth', -1)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
@@ -157,8 +157,13 @@ def makeDataFrame(urls):
     df['Prod_URL'] = '<a href=' + df['Prod_URL'] + '><div>' + 'url' + '</div></a>' # make the url a anchor
     pickleDump(df.drop([ 'LastUpdateInDays' ], axis=1))
     mail_df.sendDFAsMail(df.drop([ 'LastUpdateInDays' ], axis=1))
-#    print(df['Prod_URL'])
+    printDF(df)
+
+def printDF(df):
+    pd.set_option('display.max_colwidth', 70)
     print(df.drop(['Prod_URL', 'LastUpdateInDays', 'MainCat', 'SubCat', 'ID'], axis=1))
+
+
 
 if __name__ == "__main__":
 

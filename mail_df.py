@@ -37,7 +37,6 @@ def authMailHtml(loaded):
   print('Sending Mail')
   context = ssl.create_default_context()
   with smtplib.SMTP_SSL(smtp_server, 465, context=context) as server:
-      server.set_debuglevel(1)
       server.login(sender_email, password)
       server.sendmail(
           sender_email, receiver_email, message.as_string()
