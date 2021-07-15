@@ -103,6 +103,8 @@ def cleanLastUpdated(_input):
         return cleanWeeks(_input)
     elif "months" in _input:
         return cleanMonths(_input)
+    elif "years" in _input:
+        return cleanYears(_input)
     else: return 0
 
 def cleanDays(days):
@@ -115,6 +117,10 @@ def cleanWeeks(weeks):
 def cleanMonths(months):
     _tmp = months.split(" ")
     return int(_tmp[0]) * 30
+
+def cleanYears(years):
+    _tmp = years.split(" ")
+    return int(_tmp[0]) * 365
 
 def breakOutData(_input, url):
     title = getTitle(_input)
