@@ -86,6 +86,16 @@ def getLastUpdate(_input, newMethod=False):
     lastUpdatedDays = cleanLastUpdated(lastUpdated)
     return lastUpdated, lastUpdatedDays
 
+def getComments(_input, newMethod=False):
+  dateEnteredSection = _input.find('ul', {'class': 'date-entered'}) #Comments are in here
+  _tmp = dateEnteredSection.find_all('li') # comments are in the 4th <li>
+  if len(_tmp) > 3:
+    numOfComments = _tmp[3].get_text().strip().replace(' comments', '').replace(' comment', '')
+    return numOfComments
+  else:
+    return "0"
+  #print(tmp.find_all('li')[3].get_text().strip())
+
 def cleanLastUpdated(_input):
     if _input == "about a day ago":
         return 1
@@ -131,7 +141,8 @@ def breakOutData(_input, url):
     mainCat, subCat = getCats(url)
     productURL = getProductURL(_input)
     lastUpdate, lastUpdateDays = getLastUpdate(_input)
-    return [ title, price, area, county, id, mainCat, subCat, lastUpdate, productURL, lastUpdateDays ]
+    comments = getComments(_input)
+    return [ title, price, area, county, id, mainCat, subCat, lastUpdate, productURL, lastUpdateDays, comments]
 
 def createDataList(url):
     adRows = getAdsSoup(url)
@@ -154,16 +165,22 @@ def pickleDump(df):
      pickle.dump(df, open(pk_file, 'wb'))
 
 def makeDataFrame(urls):
+    sendMail = False
     checkURL(urls)
     for url in urls:
         createDataList(url)
-    df = pd.DataFrame(allData, columns = ['Title', 'Price', 'Area', 'County', 'ID', 'MainCat', 'SubCat', 'LastUpdate', 'Prod_URL', 'LastUpdateInDays'])
+    df = pd.DataFrame(allData, columns = ['Title', 'Price', 'Area', 'County', 'ID', 'MainCat', 'SubCat', 'LastUpdate', 'Prod_URL', 'LastUpdateInDays', 'Comments'])
     df.drop_duplicates(inplace=True)
     df = df.sort_values(by = 'LastUpdateInDays')
     df['Prod_URL'] = '<a href=' + df['Prod_URL'] + '><div>' + 'url' + '</div></a>' # make the url a anchor
     pickleDump(df.drop([ 'LastUpdateInDays' ], axis=1))
-    mail_df.sendDFAsMail(df.drop([ 'LastUpdateInDays' ], axis=1))
-    printDF(df)
+    if sendMail == True:
+      mail_df.sendDFAsMail(df.drop([ 'LastUpdateInDays' ], axis=1))
+    else:
+      df_tmp = df.drop([ 'LastUpdateInDays' ], axis=1)
+      print(df_tmp.to_html(escape = False))
+      df
+    #printDF(df)
 
 def printDF(df):
     pd.set_option('display.max_colwidth', 70)
