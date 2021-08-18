@@ -178,7 +178,7 @@ def makeDataFrame(urls):
       mail_df.sendDFAsMail(df.drop([ 'LastUpdateInDays' ], axis=1))
     else:
       df_tmp = df.drop([ 'LastUpdateInDays' ], axis=1)
-      print(df_tmp.to_html(escape = False))
+      print(df_tmp.to_html(escape = False,index=False))
       df
     #printDF(df)
 
