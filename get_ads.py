@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup as bs
 import datetime
 import pandas as pd
-import pickle
+#import pickle
 import mail_df
 
 pd.set_option('display.max_colwidth', None)
@@ -161,8 +161,8 @@ def checkURL(urls):
     else:
         return True
 
-def pickleDump(df):
-     pickle.dump(df, open(pk_file, 'wb'))
+#def pickleDump(df):
+#     pickle.dump(df, open(pk_file, 'wb'))
 
 def makeDataFrame(urls):
     sendMail = False
@@ -173,7 +173,7 @@ def makeDataFrame(urls):
     df.drop_duplicates(inplace=True)
     df = df.sort_values(by = 'LastUpdateInDays')
     df['Prod_URL'] = '<a href=' + df['Prod_URL'] + '><div>' + 'url' + '</div></a>' # make the url a anchor
-    pickleDump(df.drop([ 'LastUpdateInDays' ], axis=1))
+    #pickleDump(df.drop([ 'LastUpdateInDays' ], axis=1))
     if sendMail == True:
       mail_df.sendDFAsMail(df.drop([ 'LastUpdateInDays' ], axis=1))
     else:
